@@ -33,41 +33,33 @@ def generate_coeffs(request):
     return JsonResponse(response)
 
 def execute_algo(request):
+    try:
+        body = request.body
+        x = loads(body)['x']
+        y = loads(body)['y']
+        w1 = loads(body)['w1']
+        w0 = loads(body)['w0']
+        eta = loads(body)['eta']
+        x_ = loads(body)['x_']
+        epochs = loads(body)['epochs']
+        loss_hist = loads(body)['loss_hist']
+        gradient_hist = loads(body)['gradient_hist']
+        w1_hist = loads(body)['w1_hist']
+    
+        [w1, w0, loss_hist, gradient_hist, w1_hist] = execute_gd( x, y,  w1,  w0,  eta,  x_,  epochs,  loss_hist,  gradient_hist,  w1_hist)
+    
+        return JsonResponse({
+            'w1': w1, 
+            'w0': w0, 
+            'loss_hist': loss_hist, 
+            'gradient_hist': gradient_hist, 
+            'w1_hist': w1_hist
+        })
 
-    body = request.body
-
-    x = loads(body)['x']
-    y = loads(body)['y']
-    w1 = loads(body)['w1']
-    w0 = loads(body)['w0']
-    eta = loads(body)['eta']
-    x_ = loads(body)['x_']
-    epochs = loads(body)['epochs']
-    loss_hist = loads(body)['loss_hist']
-    gradient_hist = loads(body)['gradient_hist']
-    w1_hist = loads(body)['w1_hist']
-
-    [w1, w0, loss_hist, gradient_hist, w1_hist] = execute_gd(
-        x,
-        y, 
-        w1, 
-        w0, 
-        eta, 
-        x_, 
-        epochs, 
-        loss_hist, 
-        gradient_hist, 
-        w1_hist
-    )
-
-    return JsonResponse({
-        'w1': w1, 
-        'w0': w0, 
-        'loss_hist': loss_hist, 
-        'gradient_hist': gradient_hist, 
-        'w1_hist': w1_hist
-    })
-
-    return JsonResponse({ 'error': 'An error occured' })
+    except Exception as err:
+        return JsonResponse({
+            'message': 'An error occured',
+            'error': str(err)
+        })
 
 
