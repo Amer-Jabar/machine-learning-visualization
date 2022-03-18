@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from json import loads
 
@@ -8,29 +8,43 @@ from helpers.LinearRegressionHelper import get_discrete_steps, get_random_data, 
 
 # Create your views here.
 
+CORS_ORIGIN_HEADER = 'Access-Control-Allow-Origin'
+CORS_ORIGIN_VALUE = 'http://127.0.0.1:4444'
+CORS_METHOD_HEADER = 'Access-Control-Allow-Method'
+CORS_METHOD_VALUE = 'GET'
+
 def random_data(request):
     x_data, y_data = get_random_data(100, 1, 1)
-    response = {
+    responseBody = {
         'x': x_data,
         'y': y_data,
     }
-    return JsonResponse(response)
+    response = JsonResponse(responseBody)
+    response.headers[CORS_ORIGIN_HEADER] = CORS_ORIGIN_VALUE
+    response.headers[CORS_METHOD_HEADER] = CORS_METHOD_VALUE
+    return response
 
 def x_discrete_steps(request):
     x_steps = get_discrete_steps(100, 1)
-    response = {
+    responseBody = {
         'x_': x_steps,
     }
-    return JsonResponse(response)
+    response = JsonResponse(responseBody)
+    response.headers[CORS_ORIGIN_HEADER] = CORS_ORIGIN_VALUE
+    response.headers[CORS_METHOD_HEADER] = CORS_METHOD_VALUE
+    return response
 
 def generate_coeffs(request):
     eta, w1, w0 = get_random_coeffs()
-    response = {
+    responseBody = {
         'eta': eta,
         'w1': w1,
         'w0': w0
     }
-    return JsonResponse(response)
+    response = JsonResponse(responseBody)
+    response.headers[CORS_ORIGIN_HEADER] = CORS_ORIGIN_VALUE
+    response.headers[CORS_METHOD_HEADER] = CORS_METHOD_VALUE
+    return response
 
 def execute_algo(request):
     try:
@@ -48,13 +62,18 @@ def execute_algo(request):
     
         [w1, w0, loss_hist, gradient_hist, w1_hist] = execute_gd( x, y,  w1,  w0,  eta,  x_,  epochs,  loss_hist,  gradient_hist,  w1_hist)
     
-        return JsonResponse({
+        responseBody = {
             'w1': w1, 
             'w0': w0, 
             'loss_hist': loss_hist, 
             'gradient_hist': gradient_hist, 
             'w1_hist': w1_hist
-        })
+        }
+
+        response = JsonResponse(responseBody)
+        response.headers[CORS_ORIGIN_HEADER] = CORS_ORIGIN_VALUE
+        response.headers[CORS_METHOD_HEADER] = CORS_METHOD_VALUE
+        return response
 
     except Exception as err:
         return JsonResponse({
