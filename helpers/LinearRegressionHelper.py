@@ -11,12 +11,12 @@ def get_discrete_steps(data_range, scale):
         range_.append(x * scale)
     return range_
 
-def get_random_data(data_range, x_rate, y_rate):
+def get_random_data(data_range, x_rate, y_rate, range_):
     data_x = []
     data_y = []
     for x in range(data_range):
         data_x.append(random() + (x * x_rate))
-        value = uniform(1, -1) + (x * y_rate) + 1
+        value = uniform(range_, (range_ * -1)) + (x * y_rate / 2) + range_
         if value < 0:
             value *= -1
         data_y.append(value)
@@ -24,19 +24,19 @@ def get_random_data(data_range, x_rate, y_rate):
     return data_x, data_y
 
 def get_random_coeffs():
-    eta = 0.05
+    eta = 0.0001
     w1 = 1.5
     w0 = 2
 
     return eta, w1, w0
 
-def execute_gd(x, y, w1, w0, eta, x_, epochs, loss_hist, gradient_hist, w1_hist):
-    if not loss_hist:
-        loss_hist = []
-    if not gradient_hist:
-        gradient_hist = []
-    if not w1_hist:
-        w1_hist = []
+def execute_gd(x, y, w1, w0, eta, x_, epochs):
+    # if not loss_hist:
+    loss_hist = []
+    # if not gradient_hist:
+    gradient_hist = []
+    # if not w1_hist:
+    w1_hist = []
 
     for iter_ in range(epochs):
         # y_hat = (X.w1) + w0
