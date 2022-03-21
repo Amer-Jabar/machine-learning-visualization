@@ -44,13 +44,13 @@ def execute_gd(x, y, w1, w0, eta, x_, epochs):
         y_ = np.dot(w1, x_) + w0
         
         # MSE loss function
-        loss = (1 / 100) * sum((y_ - y) ** 2)
+        loss = (1 / len(x)) * sum((y_ - y) ** 2)
         loss_hist.append(loss)
         
         # The gradient - slope - partial derivative of the linear equation (summation of linear equations)
         # We calculate as many gradient
-        gradient_w0 = (1 / 100) * sum(((np.dot(w1, x) + w0) - y) * 1)
-        gradient_w1 = (1 / 100) * sum(((np.dot(w1, x) + w0) - y) * x)
+        gradient_w0 = (1 / len(x)) * sum(((np.dot(w1, x) + w0) - y) * 1)
+        gradient_w1 = (1 / len(x)) * sum(((np.dot(w1, x) + w0) - y) * x)
         gradient_hist.append(w1)
         
         # We subract the coeffecients by learning rate * gradients
