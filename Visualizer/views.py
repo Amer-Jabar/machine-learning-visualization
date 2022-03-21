@@ -18,6 +18,13 @@ X_SCALE = 1
 Y_SCALE = 1
 DATA_SIZE_RANGE_ = 10
 
+def base_endpoint(request):
+    responseBody = { 'message': 'You have reached the base endpoint' }
+    response = JsonResponse(responseBody)
+    response.headers[CORS_ORIGIN_HEADER] = CORS_ORIGIN_VALUE
+    response.headers[CORS_METHOD_HEADER] = CORS_METHOD_VALUE
+    return response
+
 def random_data(request):
     x_data, y_data = get_random_data(DATA_SIZE, X_SCALE, Y_SCALE, DATA_SIZE_RANGE_)
     responseBody = {
