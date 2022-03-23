@@ -1,11 +1,26 @@
 import numpy as np
 
+def fill_with_values(size, value_1, value_2):
+    array = []
+    for x in range(size):
+        if x < size / 2:
+            array.append(value_1)
+        else:
+            array.append(value_2)
+    return array
+
+def generate_random_data(size, lower_bound, upper_bound):
+    arr = []
+    for i in range(size):
+        if i < size / 2:
+            arr.append((np.random.rand() * upper_bound))
+        else:
+            arr.append((np.random.rand() * upper_bound) + lower_bound)
+    return arr
+
 def get_random_data():
-    x = np.array([
-        1, 2, 3, 4, 1, 2, 4, 3, 4, 5, 1, 2, 3, 4, 2, 3, 2, 3, 1, 4, 5, 6, 3, 1, 4, 1, 1, 2, 3, 5,
-        12, 14, 13, 10, 11, 12, 11, 10, 13, 14, 12, 10, 10, 12, 10, 13, 12, 14, 12, 11, 10, 10, 14, 12, 13, 10, 11, 10, 14, 14,
-    ])
-    y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    x = generate_random_data(100, 10, 10)
+    y = fill_with_values(len(x), 0, 1)
     return x, y
 
 def get_random_coeffs():
@@ -53,6 +68,6 @@ def execute_lr(x, y, data_size, eta, w1, w0, loss_hist = []):
     slope = gradient(x, y, pred, data_size)
     w1 = update(w1, eta, slope)
     w0 = update(w0, eta, slope)
-        
-    return w1, w0, loss_hist
+
+    return w1, w0, loss_hist, pred
 

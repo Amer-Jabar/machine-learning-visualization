@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-&d_(=_xu6%b1t16x*l2br&r(xjhwhvffkzcko36ng*ywhe@c0q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'machine-learning-visualizer.azurewebsites.net'
-]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

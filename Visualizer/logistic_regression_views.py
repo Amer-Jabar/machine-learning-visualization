@@ -35,7 +35,8 @@ def random_data(request):
     return response
 
 def generate_coeffs(request):
-    eta, w1, w0 = get_random_coeffs()
+    w1, w0, eta = get_random_coeffs()
+    print('eta:   ' + str(eta))
     responseBody = {
         'eta': eta,
         'w1': w1,
@@ -54,13 +55,18 @@ def execute_algo(request):
     w1 = loads(body)['w1']
     w0 = loads(body)['w0']
     eta = loads(body)['eta']
+    try:
+        loss_hist = loads(body)['loss_hist']
+    except:
+        loss_hist = []
 
-    w1, w0, loss_hist = execute_lr(x, y, len(x), eta, w1, w0)
+    w1, w0, loss_hist, pred = execute_lr(x, y, len(x), eta, w1, w0, loss_hist)
 
     responseBody = {
-        'w1': w1, 
-        'w0': w0, 
-        'loss_hist': loss_hist, 
+        'w1': w1,
+        'w0': w0,
+        'loss_hist': loss_hist,
+        'y': list(pred)
     }
 
     response = JsonResponse(responseBody)
