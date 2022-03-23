@@ -1,5 +1,10 @@
 import numpy as np
 
+def replace_one(arr, replacer_value):
+    for i in range(len(arr)):
+        if arr[i] == 1:
+            arr[i] = replacer_value
+
 def fill_with_values(size, value_1, value_2):
     array = []
     for x in range(size):
@@ -24,8 +29,8 @@ def get_random_data():
     return x, y
 
 def get_random_coeffs():
-    w1 = 0
-    w0 = 0
+    w1 = np.random.randint(0, 3)
+    w0 = np.random.randint(0, 3)
     eta = 0.01
     return w1, w0, eta
 
@@ -47,10 +52,13 @@ def cross_entropy(data_size, y, pred):
     if type(pred) != "<class 'numpy.ndarray'>":
         pred = np.array(pred)
 
+    # The problem encounterd here is log of 0 which is shown as division by 0
+    # The solution is to change the value in order not to become 0
+    replace_one(pred, 0.999)
     part_a = (y * np.log(pred))
     part_b = ((1 - y) * np.log(1 - pred))
-    
-    cost = (-1 / data_size) * sum(part_a + part_b)
+    sum_ = sum(part_a + part_b)
+    cost = (-1 / data_size) * sum_
     return cost
     
 def gradient(x, y, pred, data_size):
@@ -61,7 +69,7 @@ def update(weight, eta, gradient):
     weight -= gradient
     return weight
 
-def execute_lr(x, y, data_size, eta, w1, w0, loss_hist = []):    
+def execute_lr(x, y, data_size, eta, w1, w0, loss_hist):        
     pred = predict(x, w1, w0)
     cost = cross_entropy(data_size, y, pred)
     loss_hist.append(cost)
@@ -69,5 +77,6 @@ def execute_lr(x, y, data_size, eta, w1, w0, loss_hist = []):
     w1 = update(w1, eta, slope)
     w0 = update(w0, eta, slope)
 
-    return w1, w0, loss_hist, pred
+    return w1, w0, loss_hist
+
 
