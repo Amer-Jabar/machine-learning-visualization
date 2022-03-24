@@ -20,7 +20,7 @@ def generate_random_data(size, lower_bound, upper_bound):
         if i < size / 2:
             arr.append((np.random.rand() * upper_bound))
         else:
-            arr.append((np.random.rand() * upper_bound) + lower_bound)
+            arr.append((np.random.rand() * upper_bound) + lower_bound / 2)
     return arr
 
 def get_random_data():
@@ -32,6 +32,8 @@ def get_random_coeffs():
     w1 = np.random.randint(0, 3)
     w0 = np.random.randint(0, 3)
     eta = 0.01
+    if w1 == 0 and w0 >= 0:
+        w1 = 1
     return w1, w0, eta
 
 def sigmoid(z):
@@ -77,6 +79,6 @@ def execute_lr(x, y, data_size, eta, w1, w0, loss_hist):
     w1 = update(w1, eta, slope)
     w0 = update(w0, eta, slope)
 
-    return w1, w0, loss_hist
+    return w1, w0, loss_hist, list(pred)
 
 

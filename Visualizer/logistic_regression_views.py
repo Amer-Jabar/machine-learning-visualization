@@ -59,11 +59,12 @@ def execute_algo(request):
     except:
         loss_hist = []
 
-    w1, w0, loss_hist = execute_lr(x, y, len(x), eta, w1, w0, loss_hist)
+    w1, w0, loss_hist, pred = execute_lr(x, y, len(x), eta, w1, w0, loss_hist)
 
     responseBody = {
         'w1': w1,
         'w0': w0,
+        'pred': pred,
         'loss_hist': loss_hist
     }
 
